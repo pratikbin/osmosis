@@ -2,6 +2,7 @@ package stableswap
 
 import (
 	"errors"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -188,7 +189,12 @@ func solveCFMMBinarySearch(constantFunction func(osmomath.BigDec, osmomath.BigDe
 			panic(err)
 		}
 
-		xOut := xReserve.Sub(x_est).Abs()
+		// xOut = amount of coins given to caller, for y_in many tokens being added to pool.
+		// xOut is positive -> caller gets this many tokens out of the pool
+		//   this is upperbounded at the amount of tokens in the pool.
+		// xOut is negative -> caller must give this many tokens to pool. (unbounded)
+		// TODO: Double check for any approximation error
+		xOut := xReserve.Sub(x_est)
 		if xOut.GTE(xReserve) {
 			panic("invalid output: greater than full pool reserves")
 		}
@@ -311,6 +317,11 @@ func (p *Pool) calcInAmtGivenOut(tokenOut sdk.Coin, tokenInDenom string, swapFee
 	// We are solving for the amount of token in, cfmm(x,y) = cfmm(x + x_in, y - y_out)
 	// x = tokenInSupply, y = tokenOutSupply, yIn = -tokenOutAmount
 	cfmmIn := solveCfmm(tokenInSupply, tokenOutSupply, remReserves, tokenOutAmount.Neg())
+	// returned cfmmIn is negative, representing we need to add this many tokens to pool.
+	// We invert that negative here.
+	cfmmIn = cfmmIn.Neg()
+	fmt.Println(tokenOutAmount)
+	fmt.Println("cfmm in", cfmmIn)
 	// handle swap fee
 	inAmt := cfmmIn.QuoRoundUp(oneMinus(swapFee))
 	// divide by (1 - swapfee) to force a corresponding increase in input asset
