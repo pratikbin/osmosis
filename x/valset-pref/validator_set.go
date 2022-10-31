@@ -26,12 +26,6 @@ func (k Keeper) SetupValidatorSetPreference(ctx sdk.Context, delegator string, p
 		return fmt.Errorf("The validator preference list is not valid")
 	}
 
-	// charge fee to execute this message
-	err := k.ChargeForCreateValSet(ctx, delegator)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -59,26 +53,6 @@ func (k Keeper) IsPreferenceValid(ctx sdk.Context, preferences []types.Validator
 		}
 	}
 	return true
-}
-
-// ChargeForCreateValSet gets the creationFee (default 10osmo) and funds it to the community pool.
-func (k Keeper) ChargeForCreateValSet(ctx sdk.Context, delegatorAddr string) error {
-	// Send creation fee to community pool
-	creationFee := k.GetParams(ctx).ValsetCreationFee
-	if creationFee == nil {
-		return fmt.Errorf("creation fee cannot be nil or 0 ")
-	}
-
-	accAddr, err := sdk.AccAddressFromBech32(delegatorAddr)
-	if err != nil {
-		return err
-	}
-
-	if err := k.distrKeeper.FundCommunityPool(ctx, creationFee, accAddr); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // IsValidatorSetEqual returns true if the two preferences are equal

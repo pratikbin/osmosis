@@ -16,7 +16,6 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 		name        string
 		delegator   sdk.AccAddress
 		preferences []types.ValidatorPreference
-		creationFee sdk.Coins
 		expectPass  bool
 	}{
 		{
@@ -36,8 +35,7 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 					Weight:         sdk.NewDecWithPrec(2, 1),
 				},
 			},
-			creationFee: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(10))),
-			expectPass:  true,
+			expectPass: true,
 		},
 		{
 			name:      "update existing validator with same valAddr and weights",
@@ -56,8 +54,7 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 					Weight:         sdk.NewDecWithPrec(2, 1),
 				},
 			},
-			creationFee: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(10))),
-			expectPass:  false,
+			expectPass: false,
 		},
 		{
 			name:      "update existing validator with same valAddr but different weights",
@@ -76,8 +73,7 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 					Weight:         sdk.NewDecWithPrec(5, 1),
 				},
 			},
-			creationFee: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(10))),
-			expectPass:  true,
+			expectPass: true,
 		},
 		{
 			name:      "create validator set with unknown validator address",
@@ -88,40 +84,14 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 					Weight:         sdk.NewDec(1),
 				},
 			},
-			creationFee: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(10))),
-			expectPass:  false,
-		},
-		{
-			name:      "creation of new validator set with 0 fees",
-			delegator: sdk.AccAddress([]byte("addr3---------------")),
-			preferences: []types.ValidatorPreference{
-				{
-					ValOperAddress: valAddrs[0],
-					Weight:         sdk.NewDecWithPrec(5, 1),
-				},
-				{
-					ValOperAddress: valAddrs[1],
-					Weight:         sdk.NewDecWithPrec(5, 1),
-				},
-			},
-			creationFee: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(0))),
-			expectPass:  false,
+			expectPass: false,
 		},
 	}
 
 	for _, test := range tests {
 		suite.Run(test.name, func() {
-
-			bankKeeper := suite.App.BankKeeper
-
 			// fund the account that is trying to delegate
 			suite.FundAcc(test.delegator, sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 100)})
-			initialBalance := bankKeeper.GetBalance(suite.Ctx, test.delegator, sdk.DefaultBondDenom).Amount
-
-			// set the creation fee
-			suite.App.ValidatorPreferenceKeeper.SetParams(suite.Ctx, types.Params{
-				ValsetCreationFee: test.creationFee,
-			})
 
 			// setup message server
 			msgServer := valPref.NewMsgServerImpl(suite.App.ValidatorPreferenceKeeper)
@@ -131,10 +101,6 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 			_, err := msgServer.SetValidatorSetPreference(c, types.NewMsgSetValidatorSetPreference(test.delegator, test.preferences))
 			if test.expectPass {
 				suite.Require().NoError(err)
-
-				// check if the fee has been used
-				balance := bankKeeper.GetBalance(suite.Ctx, test.delegator, sdk.DefaultBondDenom).Amount
-				suite.Require().True(balance.LT(initialBalance))
 			} else {
 				suite.Require().Error(err)
 			}
