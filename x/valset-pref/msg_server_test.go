@@ -38,20 +38,39 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 			expectPass: true,
 		},
 		{
-			name:      "update existing validator with same valAddr and weights",
+			name:      "update 2 validator weights but leave the 3rd one as is",
 			delegator: sdk.AccAddress([]byte("addr1---------------")),
 			preferences: []types.ValidatorPreference{
-				{
-					ValOperAddress: valAddrs[1],
-					Weight:         sdk.NewDecWithPrec(3, 1),
-				},
 				{
 					ValOperAddress: valAddrs[0],
 					Weight:         sdk.NewDecWithPrec(5, 1),
 				},
 				{
+					ValOperAddress: valAddrs[1],
+					Weight:         sdk.NewDecWithPrec(4, 1),
+				},
+				{
 					ValOperAddress: valAddrs[2],
-					Weight:         sdk.NewDecWithPrec(2, 1),
+					Weight:         sdk.NewDecWithPrec(1, 1),
+				},
+			},
+			expectPass: true,
+		},
+		{
+			name:      "update existing validator with same valAddr and weights",
+			delegator: sdk.AccAddress([]byte("addr1---------------")),
+			preferences: []types.ValidatorPreference{
+				{
+					ValOperAddress: valAddrs[0],
+					Weight:         sdk.NewDecWithPrec(5, 1),
+				},
+				{
+					ValOperAddress: valAddrs[1],
+					Weight:         sdk.NewDecWithPrec(4, 1),
+				},
+				{
+					ValOperAddress: valAddrs[2],
+					Weight:         sdk.NewDecWithPrec(1, 1),
 				},
 			},
 			expectPass: false,
@@ -62,7 +81,7 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 			preferences: []types.ValidatorPreference{
 				{
 					ValOperAddress: valAddrs[0],
-					Weight:         sdk.NewDecWithPrec(3, 1),
+					Weight:         sdk.NewDecWithPrec(1, 1),
 				},
 				{
 					ValOperAddress: valAddrs[1],
@@ -70,14 +89,14 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 				},
 				{
 					ValOperAddress: valAddrs[2],
-					Weight:         sdk.NewDecWithPrec(5, 1),
+					Weight:         sdk.NewDecWithPrec(7, 1),
 				},
 			},
 			expectPass: true,
 		},
 		{
 			name:      "create validator set with unknown validator address",
-			delegator: sdk.AccAddress([]byte("addr2---------------")),
+			delegator: sdk.AccAddress([]byte("addr1---------------")),
 			preferences: []types.ValidatorPreference{
 				{
 					ValOperAddress: "addr1---------------",
@@ -90,6 +109,7 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 
 	for _, test := range tests {
 		suite.Run(test.name, func() {
+
 			// fund the account that is trying to delegate
 			suite.FundAcc(test.delegator, sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 100)})
 

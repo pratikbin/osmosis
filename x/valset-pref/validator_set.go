@@ -55,27 +55,35 @@ func (k Keeper) IsPreferenceValid(ctx sdk.Context, preferences []types.Validator
 	return true
 }
 
-// IsValidatorSetEqual returns true if the two preferences are equal
+// IsValidatorSetEqual returns true if the two preferences are equal.
 func (k Keeper) IsValidatorSetEqual(newPreferences, existingPreferences []types.ValidatorPreference) bool {
+	var isEqual bool
+	// check if the two validator-set length are equal
 	if len(newPreferences) != len(existingPreferences) {
 		return false
 	}
 
+	// sort the new validator-set
 	sort.Slice(newPreferences, func(i, j int) bool {
 		return newPreferences[i].ValOperAddress < newPreferences[j].ValOperAddress
 	})
 
+	// sort the existing validator-set
 	sort.Slice(existingPreferences, func(i, j int) bool {
 		return existingPreferences[i].ValOperAddress < existingPreferences[j].ValOperAddress
 	})
 
 	// make sure that both valAddress and weights cannot be the same in the new val-set
+	// if we just find one difference between two sets we can gurantee that they are different
 	for i := range newPreferences {
 		if newPreferences[i].ValOperAddress != existingPreferences[i].ValOperAddress ||
 			!newPreferences[i].Weight.Equal(existingPreferences[i].Weight) {
-			return false
+			isEqual = false
+			break
+		} else {
+			isEqual = true
 		}
 	}
 
-	return true
+	return isEqual
 }

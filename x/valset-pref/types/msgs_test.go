@@ -54,6 +54,10 @@ func TestMsgSetValidatorSetPreference(t *testing.T) {
 						ValOperAddress: "osmovaloper1x2cfenmflhj3dwm2ph6nkgqr3nppkg86fxaymg",
 						Weight:         sdk.NewDecWithPrec(4, 1),
 					},
+					{
+						ValOperAddress: "osmovaloper1jcr68jghzm24zwe78zuhz7xahua8429erxk7vm",
+						Weight:         sdk.NewDecWithPrec(2, 1),
+					},
 				},
 			},
 			expectPass: false,

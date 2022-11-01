@@ -181,12 +181,11 @@ func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes
 
 // RandomizedParams creates randomized pool-incentives param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	return nil // TODO
+	return nil
 }
 
 // RegisterStoreDecoder registers a decoder for supply module's types.
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	// TODO
 }
 
 // WeightedOperations returns the all the module operations with their respective weights.
