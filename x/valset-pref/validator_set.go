@@ -74,7 +74,7 @@ func (k Keeper) IsValidatorSetEqual(newPreferences, existingPreferences []types.
 	})
 
 	// make sure that both valAddress and weights cannot be the same in the new val-set
-	// if we just find one difference between two sets we can gurantee that they are different
+	// if we just find one difference between two sets we can guarantee that they are different
 	for i := range newPreferences {
 		if newPreferences[i].ValOperAddress != existingPreferences[i].ValOperAddress ||
 			!newPreferences[i].Weight.Equal(existingPreferences[i].Weight) {

@@ -9,6 +9,9 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSetValidatorSetPreference{}, "osmosis/validator-set-preference/set-validator-set-preference", nil)
+	cdc.RegisterConcrete(&MsgDelegateToValidatorSet{}, "osmosis/validator-set-preference/delegate-to-validator-set", nil)
+	cdc.RegisterConcrete(&MsgUndelegateFromValidatorSet{}, "osmosis/validator-set-preference/undelegate-from-validator-set", nil)
+	cdc.RegisterConcrete(&MsgWithdrawDelegationRewards{}, "osmosis/validator-set-preference/withdraw-delegation-rewards", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {

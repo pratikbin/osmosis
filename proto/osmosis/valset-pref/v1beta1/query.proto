@@ -1,5 +1,5 @@
 syntax = "proto3";
-package osmosis.validatorsetpreference.v1beta1;
+package osmosis.valsetpref.v1beta1;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
@@ -13,14 +13,14 @@ service Query {
   // Returns the list of ValidatorPreferences for the user.
   rpc UserValidatorPreferences(QueryUserValidatorPreferences)
       returns (QueryUserValidatorPreferenceResponse) {
-    option (google.api.http).get = "/osmosis/valset-pref/v1beta1/{user}";
+    option (google.api.http).get = "/osmosis/valset-pref/v1beta1/{address}";
   }
 }
 
 // Request type for UserValidatorPreferences.
 message QueryUserValidatorPreferences {
   // user account address
-  string user = 1;
+  string address = 1;
 }
 
 // Response type the QueryUserValidatorPreferences query request

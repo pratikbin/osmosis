@@ -40,7 +40,7 @@ import (
 	"github.com/osmosis-labs/osmosis/v12/x/tokenfactory"
 	"github.com/osmosis-labs/osmosis/v12/x/twap/twapmodule"
 	"github.com/osmosis-labs/osmosis/v12/x/txfees"
-	validatorpreferencemodule "github.com/osmosis-labs/osmosis/v12/x/valset-pref/valpref-module"
+	valsetprefmodule "github.com/osmosis-labs/osmosis/v12/x/valset-pref/valpref-module"
 )
 
 // AppModuleBasics returns ModuleBasics for the module BasicManager.
@@ -85,7 +85,7 @@ var AppModuleBasics = []module.AppModuleBasic{
 	epochs.AppModuleBasic{},
 	superfluid.AppModuleBasic{},
 	tokenfactory.AppModuleBasic{},
-	validatorpreferencemodule.AppModuleBasic{},
+	valsetprefmodule.AppModuleBasic{},
 	wasm.AppModuleBasic{},
 	ica.AppModuleBasic{},
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/osmosis-labs/osmosis/v12/app/upgrades"
 )
 
-// UpgradeName defines the on-chain upgrade name for the Osmosis v9 upgrade.
+// UpgradeName defines the on-chain upgrade name for the Osmosis v13 upgrade.
 const UpgradeName = "v13"
 
 var Upgrade = upgrades.Upgrade{

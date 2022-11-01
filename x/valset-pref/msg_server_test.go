@@ -109,12 +109,8 @@ func (suite *KeeperTestSuite) TestSetValidatorSetPreference() {
 
 	for _, test := range tests {
 		suite.Run(test.name, func() {
-
-			// fund the account that is trying to delegate
-			suite.FundAcc(test.delegator, sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 100)})
-
 			// setup message server
-			msgServer := valPref.NewMsgServerImpl(suite.App.ValidatorPreferenceKeeper)
+			msgServer := valPref.NewMsgServerImpl(suite.App.ValidatorSetPreferenceKeeper)
 			c := sdk.WrapSDKContext(suite.Ctx)
 
 			// call the create validator set preference

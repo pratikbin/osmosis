@@ -29,7 +29,6 @@ func (server msgServer) SetValidatorSetPreference(goCtx context.Context, msg *ty
 		return nil, err
 	}
 
-	// create/update the validator-set based on what user provides
 	setMsg := types.ValidatorSetPreferences{
 		Preferences: msg.Preferences,
 	}
