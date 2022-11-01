@@ -18,7 +18,6 @@ func CreateUpgradeHandler(
 ) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		keepers.LockupKeeper.SetParams(ctx, lockuptypes.DefaultParams())
-
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
 }
