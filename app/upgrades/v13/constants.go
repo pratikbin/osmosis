@@ -12,7 +12,7 @@ const UpgradeName = "v13"
 var Upgrade = upgrades.Upgrade{
 	UpgradeName:          UpgradeName,
 	CreateUpgradeHandler: CreateUpgradeHandler,
-	StoreUpgrades:        store.StoreUpgrades{
+	StoreUpgrades: store.StoreUpgrades{
 		Added:   []string{valsetpreftypes.StoreKey},
 		Deleted: []string{}, // double check bech32ibc
 	},

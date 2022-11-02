@@ -20,7 +20,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	validatorprefclient "github.com/osmosis-labs/osmosis/v12/x/valset-pref/client"
 	"github.com/osmosis-labs/osmosis/v12/x/valset-pref/client/queryproto"
 )
@@ -98,9 +97,7 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 type AppModule struct {
 	AppModuleBasic
 
-	keeper        keeper.Keeper
-	accountKeeper stakingtypes.AccountKeeper
-	bankKeeper    stakingtypes.BankKeeper
+	keeper keeper.Keeper
 }
 
 func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
